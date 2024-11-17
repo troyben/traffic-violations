@@ -1,35 +1,30 @@
-# Stage 1: Build
-FROM node:18 AS build
+# Build stage
+FROM node:20-alpine as build
 
-# Set the working directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies with a specific network timeout
+RUN npm install --network-timeout 100000
 
-# Copy the rest of the application code
+# Copy project files
 COPY . .
 
-# Build the app
-RUN npm run build
+# Set Node options and add a timeout
+ENV NODE_OPTIONS="--max_old_space_size=1024"
+RUN timeout 300 npm run build || exit 1
 
-# Stage 2: Serve
-FROM node:18-alpine AS serve
+# Production stage
+FROM node:20-alpine
 
-# Install a lightweight HTTP server for production
 RUN npm install -g serve
 
-# Set the working directory
+COPY --from=build /app/dist /app/dist
+
 WORKDIR /app
 
-# Copy built files from the build stage
-COPY --from=build /app/dist ./dist
+EXPOSE 3000
 
-# Expose the port on which the app runs
-EXPOSE 5000
-
-# Start the server
-CMD ["serve", "-s", "dist", "-l", "5000"]
+CMD ["serve", "-s", "dist"]

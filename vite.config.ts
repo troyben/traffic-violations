@@ -5,6 +5,18 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   build: {
-    assetsInlineLimit: 0, // Disable inlining of assets
+    assetsInlineLimit: 4096, // 4kb
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['vue', 'vue-router', 'pinia'], // Add your major dependencies
+          'fonts': ['vfonts/Roboto.css']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
   },
+  optimizeDeps: {
+    exclude: ['vfonts'] // Exclude vfonts from optimization
+  }
 })
