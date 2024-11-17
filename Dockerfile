@@ -18,5 +18,8 @@ RUN npm run build
 # Expose the port the app runs on
 EXPOSE 3000
 
+# Install serve package globally for production hosting
+RUN npm install -g serve
+
 # Start the application in production mode
-CMD ["npm", "run", "prod"]
+CMD ["serve", "-s", "dist"]
