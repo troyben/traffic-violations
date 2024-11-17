@@ -1,0 +1,381 @@
+<template>
+    <div class="w-full">
+        <div class="w-full">
+            <div class="flex items-center gap-6 mb-8">
+                <n-avatar round size="large" :style="{
+                    background: '#F4B183',
+                    width: '100px',
+                    height: '100px',
+                    fontSize: '32px'
+                }">
+                    {{ userInitials }}
+                </n-avatar>
+                <div>
+                    <h1 class="text-2xl font-medium mb-2">Profile Settings</h1>
+                    <p class="text-gray-600">Manage your account information</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+                <n-card class="h-full">
+                    <div class="space-y-6 h-full">
+                        <div class="flex items-center gap-6">
+                            <n-avatar round size="large" :style="{
+                                background: '#F4B183',
+                                width: '80px',
+                                height: '80px',
+                                fontSize: '24px'
+                            }">
+                                {{ userInitials }}
+                            </n-avatar>
+                            <div>
+                                <h2 class="text-lg font-medium mb-1">Profile Picture</h2>
+                                <p class="text-gray-600 text-sm">Update your profile picture</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="relative">
+                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                    backgroundColor: isDark ? '#242424' : '#ffffff',
+                                    color: isDark ? '#e1e1e1' : '#666666'
+                                }">
+                                    First Name
+                                </label>
+                                <n-input v-model:value="profileForm.firstName" size="large"
+                                    placeholder="Enter first name" :style="{ '--n-padding-vertical': '12px' }"
+                                    class="modal-input" />
+                            </div>
+
+                            <div class="relative">
+                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                    backgroundColor: isDark ? '#242424' : '#ffffff',
+                                    color: isDark ? '#e1e1e1' : '#666666'
+                                }">
+                                    Last Name
+                                </label>
+                                <n-input v-model:value="profileForm.lastName" size="large" placeholder="Enter last name"
+                                    :style="{ '--n-padding-vertical': '12px' }" class="modal-input" />
+                            </div>
+
+                            <div class="relative">
+                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                    backgroundColor: isDark ? '#242424' : '#ffffff',
+                                    color: isDark ? '#e1e1e1' : '#666666'
+                                }">
+                                    Email
+                                </label>
+                                <n-input v-model:value="profileForm.email" size="large"
+                                    placeholder="Enter email address" :style="{ '--n-padding-vertical': '12px' }"
+                                    class="modal-input" />
+                            </div>
+
+                            <div class="relative">
+                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                    backgroundColor: isDark ? '#242424' : '#ffffff',
+                                    color: isDark ? '#e1e1e1' : '#666666'
+                                }">
+                                    Phone
+                                </label>
+                                <n-input v-model:value="profileForm.phone" size="large" placeholder="Enter phone number"
+                                    :style="{ '--n-padding-vertical': '12px' }" class="modal-input" />
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <n-button type="primary" @click="handleSave" :style="{
+                                backgroundColor: '#F4B183',
+                                borderRadius: '50px',
+                                color: '#000000'
+                            }" :hover-style="{
+                                backgroundColor: '#f3a46d',
+                                color: '#000000'
+                            }" class="px-8 login-button">
+                                Save Changes
+                            </n-button>
+                        </div>
+                    </div>
+                </n-card>
+
+                <n-card class="h-full">
+                    <div class="space-y-4 h-full">
+                        <h2 class="text-lg font-medium mb-4">Payment Methods</h2>
+
+                        <div class="p-4 border rounded-lg cursor-pointer transition-colors" :class="[
+                            paymentMethod === 'card' ? 'border-[#F4B183] bg-[#F4B18310]' : 'border-gray-500',
+                            isDark ? 'text-white' : 'text-gray-800'
+                        ]" @click="paymentMethod = 'card'">
+                            <div class="flex items-center gap-3">
+                                <n-radio :checked="paymentMethod === 'card'" />
+                                <span class="font-medium">Card Payment</span>
+                            </div>
+
+                            <div v-if="paymentMethod === 'card'" class="mt-4 space-y-4">
+                                <div class="relative">
+                                    <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                        backgroundColor: isDark ? '#242424' : '#ffffff',
+                                        color: isDark ? '#e1e1e1' : '#666666'
+                                    }">
+                                        Card Number
+                                    </label>
+                                    <n-input v-model:value="paymentForm.cardNumber" size="large"
+                                        placeholder="Enter card number" class="modal-input" />
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="relative">
+                                        <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                            backgroundColor: isDark ? '#242424' : '#ffffff',
+                                            color: isDark ? '#e1e1e1' : '#666666'
+                                        }">
+                                            Expiry Date
+                                        </label>
+                                        <n-input v-model:value="paymentForm.expiry" size="large" placeholder="MM/YY"
+                                            class="modal-input" />
+                                    </div>
+                                    <div class="relative">
+                                        <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                            backgroundColor: isDark ? '#242424' : '#ffffff',
+                                            color: isDark ? '#e1e1e1' : '#666666'
+                                        }">
+                                            CVV
+                                        </label>
+                                        <n-input v-model:value="paymentForm.cvv" size="large" placeholder="123"
+                                            type="password" class="modal-input" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 border rounded-lg cursor-pointer transition-colors" :class="[
+                            paymentMethod === 'ecocash' ? 'border-[#F4B183] bg-[#F4B18310]' : 'border-gray-500',
+                            isDark ? 'text-white' : 'text-gray-800'
+                        ]" @click="paymentMethod = 'ecocash'">
+                            <div class="flex items-center gap-3">
+                                <n-radio :checked="paymentMethod === 'ecocash'" />
+                                <span class="font-medium">Ecocash</span>
+                            </div>
+
+                            <div v-if="paymentMethod === 'ecocash'" class="mt-4">
+                                <div class="relative">
+                                    <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                        backgroundColor: isDark ? '#242424' : '#ffffff',
+                                        color: isDark ? '#e1e1e1' : '#666666'
+                                    }">
+                                        Phone Number
+                                    </label>
+                                    <n-input v-model:value="paymentForm.phoneNumber" size="large"
+                                        placeholder="Enter phone number" class="modal-input" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-6">
+                            <n-button type="primary" @click="handleSavePayment" :style="{
+                                backgroundColor: '#F4B183',
+                                borderRadius: '50px',
+                                color: '#000000'
+                            }" :hover-style="{
+                                backgroundColor: '#f3a46d',
+                                color: '#000000'
+                            }" class="px-8 login-button">
+                                Save Payment Method
+                            </n-button>
+                        </div>
+                    </div>
+                </n-card>
+            </div>
+
+            <div class="mt-8">
+                <h2 class="text-lg font-medium mb-4">Manage Vehicles</h2>
+                <n-card>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="relative w-[300px]">
+                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                    backgroundColor: isDark ? '#242424' : '#ffffff',
+                                    color: isDark ? '#e1e1e1' : '#666666'
+                                }">
+                                    Select Vehicle
+                                </label>
+                                <n-select v-model:value="selectedVehicle" :options="vehicleOptions"
+                                    placeholder="Choose a vehicle" size="large"
+                                    :style="{ '--n-padding-vertical': '12px' }" class="vehicle-select" />
+                            </div>
+                        </div>
+
+                        <div v-if="selectedVehicle" class="grid grid-cols-2 gap-6">
+                            <div class="relative">
+                                <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                    backgroundColor: isDark ? '#242424' : '#ffffff',
+                                    color: isDark ? '#e1e1e1' : '#666666'
+                                }">
+                                    Make
+                                </label>
+                                <n-input v-model:value="vehicleForm.make" size="large" placeholder="Enter vehicle make"
+                                    :style="{ '--n-padding-vertical': '12px' }" class="modal-input" />
+                            </div>
+
+                            <div class="relative">
+                                <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                    backgroundColor: isDark ? '#242424' : '#ffffff',
+                                    color: isDark ? '#e1e1e1' : '#666666'
+                                }">
+                                    Model
+                                </label>
+                                <n-input v-model:value="vehicleForm.model" size="large"
+                                    placeholder="Enter vehicle model" :style="{ '--n-padding-vertical': '12px' }"
+                                    class="modal-input" />
+                            </div>
+
+                            <div class="relative">
+                                <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                    backgroundColor: isDark ? '#242424' : '#ffffff',
+                                    color: isDark ? '#e1e1e1' : '#666666'
+                                }">
+                                    Color
+                                </label>
+                                <n-input v-model:value="vehicleForm.color" size="large"
+                                    placeholder="Enter vehicle color" :style="{ '--n-padding-vertical': '12px' }"
+                                    class="modal-input" />
+                            </div>
+
+                            <div class="relative">
+                                <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                    backgroundColor: isDark ? '#242424' : '#ffffff',
+                                    color: isDark ? '#e1e1e1' : '#666666'
+                                }">
+                                    VRN
+                                </label>
+                                <n-input v-model:value="vehicleForm.vrn" size="large"
+                                    placeholder="Enter vehicle registration number"
+                                    :style="{ '--n-padding-vertical': '12px' }" class="modal-input" />
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-6" v-if="selectedVehicle">
+                            <n-button type="primary" @click="handleUpdateVehicle" :style="{
+                                backgroundColor: '#F4B183',
+                                borderRadius: '50px',
+                                color: '#000000'
+                            }" :hover-style="{
+                                backgroundColor: '#f3a46d',
+                                color: '#000000'
+                            }" class="px-8 login-button">
+                                Update Vehicle
+                            </n-button>
+                        </div>
+                    </div>
+                </n-card>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { ref, inject, watch } from 'vue'
+import { NCard, NButton, NInput, NAvatar, NRadio, NSelect } from 'naive-ui'
+import { useNotification } from '../composables/useNotification'
+import { useVehicles } from '../stores/vehicles'
+
+const isDark = inject('theme-key')
+const { showSuccess } = useNotification()
+const { vehicleOptions, getVehicleById } = useVehicles()
+
+const userInitials = 'JD'
+
+const profileForm = ref({
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+    phone: '+1234567890'
+})
+
+const paymentMethod = ref('card')
+const paymentForm = ref({
+    cardNumber: '',
+    expiry: '',
+    cvv: '',
+    phoneNumber: ''
+})
+
+const selectedVehicle = ref('')
+
+const vehicleForm = ref({
+    make: '',
+    model: '',
+    color: '',
+    vrn: ''
+})
+
+// Watch for vehicle selection changes
+watch(selectedVehicle, (newValue) => {
+    if (newValue) {
+        const vehicle = getVehicleById(newValue)
+        if (vehicle) {
+            vehicleForm.value = { ...vehicle }
+        }
+    } else {
+        vehicleForm.value = {
+            make: '',
+            model: '',
+            color: '',
+            vrn: ''
+        }
+    }
+})
+
+const handleSave = () => {
+    showSuccess('Profile Updated', 'Your profile has been updated successfully')
+}
+
+const handleSavePayment = () => {
+    showSuccess('Payment Method Updated', 'Your payment method has been saved successfully')
+}
+
+const handleUpdateVehicle = () => {
+    showSuccess('Vehicle Updated', 'Vehicle details have been updated successfully')
+}
+</script>
+
+<style scoped>
+.n-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.n-card :deep(.n-card__content) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.space-y-4,
+.space-y-6 {
+    flex: 1;
+}
+
+.vehicle-select :deep(.n-base-selection) {
+    height: 43px !important;
+}
+
+.vehicle-select :deep(.n-base-selection-input) {
+    padding-left: 12px !important;
+}
+
+.vehicle-select :deep(.n-base-selection-placeholder) {
+    display: flex !important;
+    align-items: center !important;
+    color: #cccccc !important;
+    font-size: 13px !important;
+    padding-left: 12px !important;
+}
+
+.vehicle-select :deep(.n-base-selection:hover) {
+    border-color: #F4B183 !important;
+}
+
+.vehicle-select :deep(.n-base-selection--focused) {
+    border-color: #F4B183 !important;
+    box-shadow: 0 0 0 2px rgba(244, 177, 131, 0.2) !important;
+}
+</style>
