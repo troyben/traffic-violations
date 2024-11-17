@@ -130,5 +130,4 @@ const themeOverrides = computed<GlobalThemeOverrides>(() => ({
 </script>
 
 <style>
-@import url('vfonts/Roboto.css');
 </style>
