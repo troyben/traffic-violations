@@ -5,6 +5,10 @@ import AuthLayout from '../layouts/AuthLayout.vue'
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
+        redirect: '/auth/login'
+    },
+    {
+        path: '/',
         component: () => import('../layouts/DefaultLayout.vue'),
         children: [
             {
