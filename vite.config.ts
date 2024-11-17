@@ -10,13 +10,11 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor': ['vue', 'vue-router', 'pinia'], // Add your major dependencies
-          'fonts': ['vfonts/Roboto.css']
         }
       }
     },
     chunkSizeWarningLimit: 1000,
   },
   optimizeDeps: {
-    exclude: ['vfonts'] // Exclude vfonts from optimization
   }
 })
