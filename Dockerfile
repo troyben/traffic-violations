@@ -14,7 +14,7 @@ COPY . .
 
 # Set Node options and add a timeout
 ENV NODE_OPTIONS="--max_old_space_size=1024"
-RUN timeout 300 npm run build || exit 1
+RUN npm run build
 
 # Production stage
 FROM node:20-alpine
