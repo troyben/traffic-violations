@@ -1,7 +1,7 @@
 <template>
     <div class="w-full">
         <div class="w-full">
-            <div class="flex items-center gap-6 mb-8">
+            <div class="flex gap-6 items-center mb-8">
                 <n-avatar round size="large" :style="{
                     background: '#F4B183',
                     width: '100px',
@@ -11,7 +11,7 @@
                     {{ userInitials }}
                 </n-avatar>
                 <div>
-                    <h1 class="text-2xl font-medium mb-2">Profile Settings</h1>
+                    <h1 class="mb-2 text-2xl font-medium">Profile Settings</h1>
                     <p class="text-gray-600">Manage your account information</p>
                 </div>
             </div>
@@ -19,7 +19,7 @@
             <div class="grid grid-cols-2 gap-6">
                 <n-card class="h-full">
                     <div class="space-y-6 h-full">
-                        <div class="flex items-center gap-6">
+                        <div class="flex gap-6 items-center">
                             <n-avatar round size="large" :style="{
                                 background: '#F4B183',
                                 width: '80px',
@@ -29,14 +29,14 @@
                                 {{ userInitials }}
                             </n-avatar>
                             <div>
-                                <h2 class="text-lg font-medium mb-1">Profile Picture</h2>
-                                <p class="text-gray-600 text-sm">Update your profile picture</p>
+                                <h2 class="mb-1 text-lg font-medium">Profile Picture</h2>
+                                <p class="text-sm text-gray-600">Update your profile picture</p>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-6">
                             <div class="relative">
-                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white" :style="{
                                     backgroundColor: isDark ? '#242424' : '#ffffff',
                                     color: isDark ? '#e1e1e1' : '#666666'
                                 }">
@@ -48,7 +48,7 @@
                             </div>
 
                             <div class="relative">
-                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white" :style="{
                                     backgroundColor: isDark ? '#242424' : '#ffffff',
                                     color: isDark ? '#e1e1e1' : '#666666'
                                 }">
@@ -59,7 +59,7 @@
                             </div>
 
                             <div class="relative">
-                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white" :style="{
                                     backgroundColor: isDark ? '#242424' : '#ffffff',
                                     color: isDark ? '#e1e1e1' : '#666666'
                                 }">
@@ -71,7 +71,7 @@
                             </div>
 
                             <div class="relative">
-                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white" :style="{
                                     backgroundColor: isDark ? '#242424' : '#ffffff',
                                     color: isDark ? '#e1e1e1' : '#666666'
                                 }">
@@ -83,7 +83,7 @@
                         </div>
 
                         <div class="flex justify-end">
-                            <n-button type="primary" @click="handleSave" :style="{
+                            <n-button type="primary" @click="handleSaveProfile" :style="{
                                 backgroundColor: '#F4B183',
                                 borderRadius: '50px',
                                 color: '#000000'
@@ -99,20 +99,20 @@
 
                 <n-card class="h-full">
                     <div class="space-y-4 h-full">
-                        <h2 class="text-lg font-medium mb-4">Payment Methods</h2>
+                        <h2 class="mb-4 text-lg font-medium">Payment Methods</h2>
 
-                        <div class="p-4 border rounded-lg cursor-pointer transition-colors" :class="[
+                        <div class="p-4 rounded-lg border transition-colors cursor-pointer" :class="[
                             paymentMethod === 'card' ? 'border-[#F4B183] bg-[#F4B18310]' : 'border-gray-500',
                             isDark ? 'text-white' : 'text-gray-800'
                         ]" @click="paymentMethod = 'card'">
-                            <div class="flex items-center gap-3">
+                            <div class="flex gap-3 items-center">
                                 <n-radio :checked="paymentMethod === 'card'" />
                                 <span class="font-medium">Card Payment</span>
                             </div>
 
                             <div v-if="paymentMethod === 'card'" class="mt-4 space-y-4">
                                 <div class="relative">
-                                    <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                    <label class="absolute -top-2 left-3 z-10 px-1 text-sm" :style="{
                                         backgroundColor: isDark ? '#242424' : '#ffffff',
                                         color: isDark ? '#e1e1e1' : '#666666'
                                     }">
@@ -123,7 +123,7 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="relative">
-                                        <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                        <label class="absolute -top-2 left-3 z-10 px-1 text-sm" :style="{
                                             backgroundColor: isDark ? '#242424' : '#ffffff',
                                             color: isDark ? '#e1e1e1' : '#666666'
                                         }">
@@ -133,7 +133,7 @@
                                             class="modal-input" />
                                     </div>
                                     <div class="relative">
-                                        <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                        <label class="absolute -top-2 left-3 z-10 px-1 text-sm" :style="{
                                             backgroundColor: isDark ? '#242424' : '#ffffff',
                                             color: isDark ? '#e1e1e1' : '#666666'
                                         }">
@@ -146,18 +146,18 @@
                             </div>
                         </div>
 
-                        <div class="p-4 border rounded-lg cursor-pointer transition-colors" :class="[
+                        <div class="p-4 rounded-lg border transition-colors cursor-pointer" :class="[
                             paymentMethod === 'ecocash' ? 'border-[#F4B183] bg-[#F4B18310]' : 'border-gray-500',
                             isDark ? 'text-white' : 'text-gray-800'
                         ]" @click="paymentMethod = 'ecocash'">
-                            <div class="flex items-center gap-3">
+                            <div class="flex gap-3 items-center">
                                 <n-radio :checked="paymentMethod === 'ecocash'" />
                                 <span class="font-medium">Ecocash</span>
                             </div>
 
                             <div v-if="paymentMethod === 'ecocash'" class="mt-4">
                                 <div class="relative">
-                                    <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                    <label class="absolute -top-2 left-3 z-10 px-1 text-sm" :style="{
                                         backgroundColor: isDark ? '#242424' : '#ffffff',
                                         color: isDark ? '#e1e1e1' : '#666666'
                                     }">
@@ -186,26 +186,25 @@
             </div>
 
             <div class="mt-8">
-                <h2 class="text-lg font-medium mb-4">Manage Vehicles</h2>
+                <h2 class="mb-4 text-lg font-medium">Manage Vehicles</h2>
                 <n-card>
                     <div class="space-y-4">
-                        <div class="flex items-center justify-between mb-4">
+                        <div class="flex justify-between items-center mb-4">
                             <div class="relative w-[300px]">
-                                <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10" :style="{
+                                <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white" :style="{
                                     backgroundColor: isDark ? '#242424' : '#ffffff',
                                     color: isDark ? '#e1e1e1' : '#666666'
                                 }">
                                     Select Vehicle
                                 </label>
-                                <n-select v-model:value="selectedVehicle" :options="vehicleOptions"
-                                    placeholder="Choose a vehicle" size="large"
-                                    :style="{ '--n-padding-vertical': '12px' }" class="vehicle-select" />
+                                <n-select v-model:value="selectedVehicle" :options="vehicleOptions" placeholder="Select vehicle"
+                                    class="vehicle-select" size="large" />
                             </div>
                         </div>
 
                         <div v-if="selectedVehicle" class="grid grid-cols-2 gap-6">
                             <div class="relative">
-                                <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                <label class="absolute -top-2 left-3 z-10 px-1 text-sm" :style="{
                                     backgroundColor: isDark ? '#242424' : '#ffffff',
                                     color: isDark ? '#e1e1e1' : '#666666'
                                 }">
@@ -216,43 +215,34 @@
                             </div>
 
                             <div class="relative">
-                                <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                <label class="absolute -top-2 left-3 z-10 px-1 text-sm" :style="{
                                     backgroundColor: isDark ? '#242424' : '#ffffff',
                                     color: isDark ? '#e1e1e1' : '#666666'
                                 }">
                                     Model
                                 </label>
-                                <n-input v-model:value="vehicleForm.model" size="large"
-                                    placeholder="Enter vehicle model" :style="{ '--n-padding-vertical': '12px' }"
-                                    class="modal-input" />
+                                <n-input v-model:value="vehicleForm.model" size="large" placeholder="Enter vehicle model"
+                                    :style="{ '--n-padding-vertical': '12px' }" class="modal-input" />
                             </div>
 
                             <div class="relative">
-                                <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
-                                    backgroundColor: isDark ? '#242424' : '#ffffff',
-                                    color: isDark ? '#e1e1e1' : '#666666'
-                                }">
-                                    Color
-                                </label>
-                                <n-input v-model:value="vehicleForm.color" size="large"
-                                    placeholder="Enter vehicle color" :style="{ '--n-padding-vertical': '12px' }"
-                                    class="modal-input" />
-                            </div>
-
-                            <div class="relative">
-                                <label class="absolute -top-2 left-3 px-1 text-sm z-10" :style="{
+                                <label class="absolute -top-2 left-3 z-10 px-1 text-sm" :style="{
                                     backgroundColor: isDark ? '#242424' : '#ffffff',
                                     color: isDark ? '#e1e1e1' : '#666666'
                                 }">
                                     VRN
                                 </label>
-                                <n-input v-model:value="vehicleForm.vrn" size="large"
-                                    placeholder="Enter vehicle registration number"
+                                <n-input v-model:value="vehicleForm.vrn" size="large" placeholder="Enter vehicle registration number"
                                     :style="{ '--n-padding-vertical': '12px' }" class="modal-input" />
                             </div>
                         </div>
 
-                        <div class="flex justify-end mt-6" v-if="selectedVehicle">
+                        <div class="flex gap-4 justify-end">
+                            <n-button v-if="selectedVehicle" type="error" @click="handleDeleteVehicle" 
+                                :style="{ borderRadius: '50px' }" class="px-8">
+                                Delete Vehicle
+                            </n-button>
+                            
                             <n-button type="primary" @click="handleUpdateVehicle" :style="{
                                 backgroundColor: '#F4B183',
                                 borderRadius: '50px',
@@ -272,22 +262,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, watch } from 'vue'
+import { ref, inject, watch, onMounted } from 'vue'
 import { NCard, NButton, NInput, NAvatar, NRadio, NSelect } from 'naive-ui'
 import { useNotification } from '../composables/useNotification'
-import { useVehicles } from '../stores/vehicles'
+import { useAuthStore } from '../stores/auth'
+import { authService } from '../services/auth.service'
+import { vehicleService, type Vehicle } from '../services/vehicle.service'
 
 const isDark = inject('theme-key')
 const { showSuccess } = useNotification()
-const { vehicleOptions, getVehicleById } = useVehicles()
+const authStore = useAuthStore()
+const notification = useNotification()
 
 const userInitials = 'JD'
 
 const profileForm = ref({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '+1234567890'
+    firstName: authStore.user?.firstName || '',
+    lastName: authStore.user?.lastName || '',
+    email: authStore.user?.email || '',
+    phone: authStore.user?.mobile || ''
 })
 
 const paymentMethod = ref('card')
@@ -298,43 +291,114 @@ const paymentForm = ref({
     phoneNumber: ''
 })
 
+const vehicles = ref<Vehicle[]>([])
+const vehicleOptions = ref<{ label: string; value: number }[]>([])
 const selectedVehicle = ref('')
-
 const vehicleForm = ref({
     make: '',
     model: '',
-    color: '',
     vrn: ''
 })
 
-// Watch for vehicle selection changes
+const loadVehicles = async () => {
+    try {
+        const response = await vehicleService.getVehicles()
+        vehicles.value = response.vehicles
+        vehicleOptions.value = vehicles.value.map(vehicle => ({
+            label: `${vehicle.make} ${vehicle.model} - ${vehicle.vrn}`,
+            value: vehicle.id
+        }))
+    } catch (error: any) {
+        notification.showError('Error', 'Failed to load vehicles')
+    }
+}
+
 watch(selectedVehicle, (newValue) => {
     if (newValue) {
-        const vehicle = getVehicleById(newValue)
+        const vehicle = vehicles.value.find(v => v.id === newValue)
         if (vehicle) {
-            vehicleForm.value = { ...vehicle }
-        }
-    } else {
-        vehicleForm.value = {
-            make: '',
-            model: '',
-            color: '',
-            vrn: ''
+            vehicleForm.value = {
+                make: vehicle.make,
+                model: vehicle.model,
+                vrn: vehicle.vrn
+            }
         }
     }
 })
 
-const handleSave = () => {
-    showSuccess('Profile Updated', 'Your profile has been updated successfully')
+const handleSaveProfile = async () => {
+    try {
+        const response = await authService.updateProfile({
+            firstName: profileForm.value.firstName,
+            lastName: profileForm.value.lastName,
+            email: profileForm.value.email
+        })
+
+        if (profileForm.value.phone) {
+            await authService.updateMobile({
+                mobile: profileForm.value.phone
+            })
+        }
+
+        // Update the store with new user data
+        authStore.setUser({
+            ...authStore.user!,  // Keep existing data
+            firstName: profileForm.value.firstName,
+            lastName: profileForm.value.lastName,
+            email: profileForm.value.email,
+            mobile: profileForm.value.phone
+        })
+
+        notification.showSuccess('Profile Updated', 'Your profile has been updated successfully')
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || 'Failed to update profile'
+        notification.showError('Update Failed', errorMessage)
+    }
 }
 
 const handleSavePayment = () => {
     showSuccess('Payment Method Updated', 'Your payment method has been saved successfully')
 }
 
-const handleUpdateVehicle = () => {
-    showSuccess('Vehicle Updated', 'Vehicle details have been updated successfully')
+const handleUpdateVehicle = async () => {
+    try {
+        await vehicleService.updateVehicle({
+            vehicleId: selectedVehicle.value,
+            vrn: vehicleForm.value.vrn,
+            make: vehicleForm.value.make,
+            model: vehicleForm.value.model
+        })
+        
+        notification.showSuccess('Success', 'Vehicle updated successfully')
+        await loadVehicles() // Reload the vehicles list
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || 'Failed to update vehicle'
+        notification.showError('Error', errorMessage)
+    }
 }
+
+const handleDeleteVehicle = async () => {
+    if (!selectedVehicle.value) return;
+
+    try {
+        await vehicleService.deleteVehicle(selectedVehicle.value)
+        notification.showSuccess('Success', 'Vehicle deleted successfully')
+        selectedVehicle.value = ''  // Clear selection
+        vehicleForm.value = {  // Reset form
+            make: '',
+            model: '',
+            vrn: ''
+        }
+        await loadVehicles()  // Reload the vehicles list
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || 'Failed to delete vehicle'
+        notification.showError('Error', errorMessage)
+    }
+}
+
+onMounted(() => {
+    loadVehicles()
+})
 </script>
 
 <style scoped>

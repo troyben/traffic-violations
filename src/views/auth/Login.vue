@@ -1,11 +1,11 @@
 <template>
     <div class="w-[500px] px-4">
         <n-card class="w-full" :content-style="{ padding: '40px 35px' }">
-            <h1 class="text-2xl font-medium text-center mb-10">Login</h1>
+            <h1 class="mb-10 text-2xl font-medium text-center">Login</h1>
 
             <n-form :model="formData" @submit.prevent="handleSubmit">
                 <div class="relative mb-4">
-                    <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10">
+                    <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white">
                         Email
                     </label>
                     <n-input v-model:value="formData.email" type="text" inputmode="email" size="large"
@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="relative mb-4">
-                    <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10">
+                    <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white">
                         Password
                     </label>
                     <n-input v-model:value="formData.password" type="password" size="large"
@@ -31,13 +31,13 @@
             </n-form>
 
             <div class="mt-6 text-center">
-                <p class="text-gray-400 text-sm mb-2">
+                <p class="mb-2 text-sm text-gray-400">
                     Don't have an account?
                     <router-link to="/auth/register" class="text-[#F4B183] hover:underline">
                         Register Now
                     </router-link>
                 </p>
-                <p class="text-gray-400 text-sm">
+                <p class="text-sm text-gray-400">
                     Have you forgotten your password?
                     <router-link to="/auth/forgot-password" class="text-[#F4B183] hover:underline">
                         Reset Password
@@ -51,17 +51,41 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { NCard, NForm, NInput, NButton } from 'naive-ui'
+import { useAuthStore } from '../../stores/auth'
+import { useNotification } from '../../composables/useNotification'
 import { useRouter } from 'vue-router'
+import { authService } from '../../services/auth.service'
 
+const authStore = useAuthStore()
+const notification = useNotification()
 const router = useRouter()
+const loading = ref(false)
 
 const formData = ref({
     email: '',
     password: ''
 })
 
-const handleSubmit = () => {
-    router.push('/dashboard')
+const handleSubmit = async () => {
+    loading.value = true
+    try {
+        const response = await authService.login(formData.value)
+        authStore.setToken(response.token)
+        authStore.setUser({
+            id: response.user.id,
+            email: response.user.email,
+            firstName: response.user.firstName,
+            lastName: response.user.lastName,
+            mobile: response.user.mobile,
+            role: response.user.role
+        })
+        router.push('/dashboard')
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || 'Invalid email or password'
+        notification.showError('Login Failed', errorMessage)
+    } finally {
+        loading.value = false
+    }
 }
 </script>
 

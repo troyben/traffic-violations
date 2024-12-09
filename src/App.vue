@@ -1,15 +1,17 @@
 <template>
   <n-config-provider :theme="isDark ? darkTheme : null" :theme-overrides="themeOverrides">
     <n-notification-provider>
-      <n-loading-bar-provider>
-        <router-view></router-view>
-      </n-loading-bar-provider>
+      <n-message-provider>
+        <n-loading-bar-provider>
+          <router-view></router-view>
+        </n-loading-bar-provider>
+      </n-message-provider>
     </n-notification-provider>
   </n-config-provider>
 </template>
 
 <script lang="ts" setup>
-import { NConfigProvider, NLoadingBarProvider, NNotificationProvider } from 'naive-ui'
+import { NConfigProvider, NLoadingBarProvider, NNotificationProvider, NMessageProvider } from 'naive-ui'
 import { darkTheme, GlobalThemeOverrides } from 'naive-ui'
 import { ref, provide, computed } from 'vue'
 

@@ -24,8 +24,19 @@ export const useNotification = () => {
         })
     }
 
+    const showWarning = (title: string, description: string) => {
+        notification.warning({
+            title,
+            description,
+            duration: 3000,
+            keepAliveOnHover: true,
+            closable: true
+        })
+    }
+
     return {
         showSuccess,
-        showError
+        showError,
+        showWarning
     }
 }

@@ -13,9 +13,12 @@
     "@vicons/antd": "^0.12.0",
     "@vicons/ionicons5": "^0.12.0",
     "@vueuse/core": "^11.2.0",
+    "axios": "^1.7.9",
     "date-fns": "^4.1.0",
+    "mitt": "^3.0.1",
     "naive-ui": "^2.40.1",
     "pinia": "^2.2.6",
+    "tiny-emitter": "^2.1.0",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
   },
