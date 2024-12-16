@@ -49,10 +49,15 @@
     </n-layout>
 
     <!-- Add Vehicle Modal -->
-    <n-modal v-model:show="showAddVehicleModal" preset="card" style="width: 600px" 
+    <n-modal v-model:show="showAddVehicleModal" preset="card" 
+        :style="{
+            width: '90vw',
+            maxWidth: '600px',
+            margin: '16px'
+        }" 
         :title="isEditMode ? 'Edit Vehicle' : 'Add Vehicle'">
         <div>
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
                 <div class="relative">
                     <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white">
                         Make
@@ -80,25 +85,42 @@
         </div>
 
         <template #footer>
-            <div class="flex gap-4 justify-end px-2">
-                <n-button size="large" class="px-8 py-2" style="color: #666666" @click="showAddVehicleModal = false">
+            <div class="flex flex-col gap-2 justify-end px-2 sm:flex-row sm:gap-4">
+                <n-button 
+                    size="large" 
+                    class="px-8 py-2 w-full sm:w-auto" 
+                    style="color: #666666" 
+                    @click="showAddVehicleModal = false"
+                >
                     Cancel
                 </n-button>
-                <n-button type="primary" size="large" :style="{
-                    backgroundColor: '#F4B183',
-                    borderRadius: '50px',
-                }" :hover-style="{
-                    backgroundColor: '#f3a46d',
-                }" class="px-8 py-2 login-button" @click="saveVehicle">
-                    <span class="w-full text-center">{{ isEditMode ? 'Update Vehicle' : 'Save Vehicle' }}</span>
+                <n-button 
+                    type="primary" 
+                    size="large" 
+                    class="px-8 py-2 w-full sm:w-auto login-button"
+                    :style="{
+                        backgroundColor: '#F4B183',
+                        borderRadius: '50px',
+                    }" 
+                    @click="saveVehicle"
+                >
+                    <span class="w-full text-center">
+                        {{ isEditMode ? 'Update Vehicle' : 'Save Vehicle' }}
+                    </span>
                 </n-button>
             </div>
         </template>
     </n-modal>
 
     <!-- Add Dispute Modal -->
-    <n-modal v-model:show="showDisputeModal" preset="card" style="width: 600px" title="Dispute Violation">
-        <div class="space-y-6">
+    <n-modal v-model:show="showDisputeModal" preset="card" 
+        :style="{
+            width: '90vw',
+            maxWidth: '600px',
+            margin: '16px'
+        }" 
+        title="Dispute Violation">
+        <div class="space-y-4 sm:space-y-6">
             <div class="relative">
                 <label class="absolute -top-2 left-3 z-10 px-1 text-sm" :style="{
                     backgroundColor: isDark ? '#242424' : '#ffffff',
@@ -128,18 +150,20 @@
                     }" class="modal-input" />
             </div>
 
-            <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-500">
+            <div class="flex flex-col gap-2 items-center sm:flex-row sm:justify-between">
+                <span class="order-2 text-sm text-gray-500 sm:order-1">
                     <span class="text-red-500">*</span> Required fields
                 </span>
-                <n-button type="primary" @click="handleDispute" :style="{
-                    backgroundColor: '#F4B183',
-                    borderRadius: '50px',
-                    color: '#000000'
-                }" :hover-style="{
-                    backgroundColor: '#f3a46d',
-                    color: '#000000'
-                }" class="px-8 login-button">
+                <n-button 
+                    type="primary" 
+                    @click="handleDispute" 
+                    class="order-1 px-8 py-2 w-full sm:w-auto sm:order-2 login-button"
+                    :style="{
+                        backgroundColor: '#F4B183',
+                        borderRadius: '50px',
+                        color: '#000000'
+                    }"
+                >
                     Submit Dispute
                 </n-button>
             </div>
@@ -147,8 +171,14 @@
     </n-modal>
 
     <!-- Add Violation Type Modal -->
-    <n-modal v-model:show="showAddViolationTypeModal" preset="card" style="width: 600px" title="Add Violation Type">
-        <div class="space-y-6">
+    <n-modal v-model:show="showAddViolationTypeModal" preset="card" 
+        :style="{
+            width: '90vw',
+            maxWidth: '600px',
+            margin: '16px'
+        }" 
+        title="Add Violation Type">
+        <div class="space-y-4 sm:space-y-6">
             <div class="relative">
                 <label class="absolute -top-2 left-3 z-10 px-1 text-sm" :style="{
                     backgroundColor: isDark ? '#242424' : '#ffffff',
@@ -172,21 +202,27 @@
                     :min="0" :precision="2" />
             </div>
 
-            <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-500">
+            <div class="flex flex-col gap-2 items-center sm:flex-row sm:justify-between">
+                <span class="order-2 text-sm text-gray-500 sm:order-1">
                     <span class="text-red-500">*</span> Required fields
                 </span>
-                <div class="flex gap-2">
-                    <n-button @click="showAddViolationTypeModal = false">
+                <div class="flex flex-col order-1 gap-2 w-full sm:flex-row sm:w-auto sm:order-2">
+                    <n-button 
+                        class="px-8 py-2 w-full sm:w-auto"
+                        @click="showAddViolationTypeModal = false"
+                    >
                         Cancel
                     </n-button>
-                    <n-button type="primary" @click="handleAddViolationType" :loading="violationTypeLoading"
+                    <n-button 
+                        type="primary" 
+                        @click="handleAddViolationType" 
+                        :loading="violationTypeLoading"
+                        class="px-8 py-2 w-full sm:w-auto login-button"
                         :style="{
                             backgroundColor: '#F4B183',
                             borderRadius: '50px',
-                        }" :hover-style="{
-                            backgroundColor: '#f3a46d',
-                        }" class="px-8 login-button">
+                        }"
+                    >
                         Add Type
                     </n-button>
                 </div>
@@ -196,7 +232,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, h, inject, type Ref } from 'vue'
+import { ref, computed, h, inject, type Ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import {
     NLayout,
@@ -309,7 +345,7 @@ const handleUserAction = async (key: string) => {
     }
 }
 
-const collapsed = ref(false)
+const collapsed = ref(window.innerWidth <= 768)
 
 const showAddVehicleModal = ref(false)
 
@@ -518,6 +554,18 @@ const handleAddViolationType = async () => {
         violationTypeLoading.value = false
     }
 }
+
+const handleResize = () => {
+    collapsed.value = window.innerWidth <= 768
+}
+
+onMounted(() => {
+    window.addEventListener('resize', handleResize)
+    // Clean up
+    onUnmounted(() => {
+        window.removeEventListener('resize', handleResize)
+    })
+})
 </script>
 
 <style scoped>
@@ -628,5 +676,188 @@ const handleAddViolationType = async () => {
 
 .modal-input[type="textarea"] {
     height: auto !important;
+}
+
+/* Mobile-friendly modal styles */
+@media (max-width: 640px) {
+    :deep(.n-modal) {
+        margin: 16px !important;
+    }
+
+    :deep(.n-modal-body-wrapper) {
+        padding: 16px !important;
+    }
+
+    :deep(.n-card-header) {
+        padding: 16px 16px 0 16px !important;
+        font-size: 18px !important;
+    }
+
+    :deep(.n-card__content) {
+        padding: 16px !important;
+    }
+
+    :deep(.n-card__footer) {
+        padding: 0 16px 16px 16px !important;
+    }
+
+    .modal-input {
+        height: 40px !important;
+    }
+
+    /* Adjust button layout for mobile */
+    :deep(.n-button) {
+        padding: 8px 16px !important;
+    }
+
+    /* Stack buttons vertically on mobile */
+    .flex.gap-4.justify-end {
+        flex-direction: column-reverse;
+        gap: 8px;
+    }
+
+    .flex.gap-4.justify-end .n-button {
+        width: 100%;
+    }
+}
+
+/* Adjust modal content for better mobile experience */
+:deep(.n-modal-body-wrapper) {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Ensure inputs are touch-friendly */
+:deep(.n-input),
+:deep(.n-select),
+:deep(.n-input-number) {
+    min-height: 40px;
+}
+
+/* Improve touch targets */
+:deep(.n-button) {
+    min-height: 40px;
+}
+
+/* Modal Responsive Styles */
+:deep(.n-modal) {
+    max-width: 600px;
+    width: 90vw !important;
+    margin: 16px;
+}
+
+:deep(.n-modal-body-wrapper) {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Form Input Styles */
+.modal-input {
+    height: 43px !important;
+}
+
+@media (max-width: 640px) {
+    /* Modal Container */
+    :deep(.n-modal) {
+        margin: 12px !important;
+    }
+
+    /* Modal Header */
+    :deep(.n-card-header) {
+        padding: 16px 16px 8px 16px !important;
+        font-size: 18px !important;
+    }
+
+    /* Modal Content */
+    :deep(.n-card__content) {
+        padding: 16px !important;
+    }
+
+    /* Modal Footer */
+    :deep(.n-card__footer) {
+        padding: 8px 16px 16px 16px !important;
+    }
+
+    /* Form Inputs */
+    .modal-input {
+        height: 40px !important;
+    }
+
+    /* Buttons */
+    :deep(.n-button) {
+        height: 40px !important;
+        padding: 8px 16px !important;
+    }
+
+    /* Input Labels */
+    .relative label {
+        font-size: 12px !important;
+    }
+
+    /* Textarea */
+    .modal-input[type="textarea"] {
+        min-height: 100px !important;
+    }
+
+    /* Select Dropdown */
+    :deep(.n-select) {
+        width: 100% !important;
+    }
+
+    /* Input Number */
+    :deep(.n-input-number) {
+        width: 100% !important;
+    }
+}
+
+/* Touch-friendly elements */
+:deep(.n-input),
+:deep(.n-select),
+:deep(.n-input-number),
+:deep(.n-button) {
+    min-height: 40px;
+}
+
+/* Input focus states */
+:deep(.n-input:focus-within),
+:deep(.n-select:focus-within),
+:deep(.n-input-number:focus-within) {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px var(--primary-color-focus) !important;
+}
+
+/* Placeholder text */
+:deep(.n-input__placeholder),
+:deep(.n-select__placeholder) {
+    font-size: 13px !important;
+    color: #cccccc !important;
+}
+
+/* Modal overlay */
+:deep(.n-modal-mask) {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+/* Scrollbar styles */
+:deep(.n-modal-body-wrapper::-webkit-scrollbar) {
+    width: 6px;
+}
+
+:deep(.n-modal-body-wrapper::-webkit-scrollbar-thumb) {
+    background-color: #cccccc;
+    border-radius: 3px;
+}
+
+/* Dark mode adjustments */
+.dark {
+    :deep(.n-modal) {
+        background-color: #242424;
+    }
+
+    :deep(.n-input),
+    :deep(.n-select),
+    :deep(.n-input-number) {
+        background-color: #1a1a1a;
+    }
 }
 </style>

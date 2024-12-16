@@ -2,130 +2,306 @@
   <div class="space-y-6">
     <!-- Admin Dashboard -->
     <template v-if="isAdmin">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-medium">All Violations</h1>
+      <!-- Mobile View with Tabs -->
+      <div class="md:hidden">
+        <n-tabs 
+          type="line"
+          animated
+          :style="{
+            '--n-tab-text-color': '#666',
+            '--n-tab-text-color-active': '#000',
+            '--n-bar-color': '#F4B183'
+          }"
+        >
+          <!-- Violations Tab -->
+          <n-tab-pane name="violations" tab="Violations">
+            <div class="space-y-4">
+              <n-card v-for="violation in allViolations" 
+                     :key="violation.id"
+                     :class="[
+                       'mobile-violation-card',
+                       { 
+                         'disputed-card': violation.status === 'disputed',
+                         'paid-card': violation.status === 'paid',
+                         'pending-card': violation.status === 'pending'
+                       }
+                     ]"
+              >
+                <div class="space-y-2">
+                  <div class="flex justify-between">
+                    <div class="font-medium">{{ violation.vehicle.vrn }}</div>
+                    <n-tag :type="getStatusType(violation.status)">
+                      {{ violation.status }}
+                    </n-tag>
+                  </div>
+                  <div class="text-sm text-gray-600">
+                    {{ new Date(violation.violation_date).toLocaleDateString() }}
+                  </div>
+                  <div>
+                    <span class="text-gray-600">User:</span> 
+                    {{ violation.user.email }}
+                  </div>
+                  <div>
+                    <span class="text-gray-600">Violation:</span> 
+                    {{ violation.violation_type.name }}
+                  </div>
+                  <div>
+                    <span class="text-gray-600">Fee:</span>
+                    ZWG {{ formatCurrency(violation.penalty_fee) }}
+                  </div>
+                </div>
+              </n-card>
+            </div>
+          </n-tab-pane>
+
+          <!-- Disputes Tab -->
+          <n-tab-pane name="disputes" tab="Disputes">
+            <div class="space-y-4">
+              <n-card v-for="dispute in allDisputes" 
+                     :key="dispute.id"
+                     class="mobile-violation-card"
+              >
+                <div class="space-y-2">
+                  <div class="flex justify-between">
+                    <div class="font-medium">Dispute #{{ dispute.id }}</div>
+                    <n-tag :type="getStatusType(dispute.status)">
+                      {{ dispute.status }}
+                    </n-tag>
+                  </div>
+                  <div>
+                    <span class="text-gray-600">Violation ID:</span> 
+                    {{ dispute.violation_id }}
+                  </div>
+                  <div>
+                    <span class="text-gray-600">Reason:</span> 
+                    {{ dispute.reason }}
+                  </div>
+                  <div>
+                    <span class="text-gray-600">Date:</span>
+                    {{ new Date(dispute.created_at).toLocaleDateString() }}
+                  </div>
+                  <div class="flex gap-2" v-if="dispute.status === 'pending'">
+                    <n-button size="small" type="primary" @click="handleDisputeAction(dispute.id, 'approve')">
+                      Approve
+                    </n-button>
+                    <n-button size="small" @click="handleDisputeAction(dispute.id, 'reject')">
+                      Reject
+                    </n-button>
+                  </div>
+                </div>
+              </n-card>
+            </div>
+          </n-tab-pane>
+
+          <!-- Violation Types Tab -->
+          <n-tab-pane name="types" tab="Violation Types">
+            <div class="space-y-4">
+              <n-card v-for="type in violationTypes" 
+                     :key="type.id"
+                     class="mobile-violation-card"
+              >
+                <div class="space-y-2">
+                  <div class="font-medium">{{ type.name }}</div>
+                  <div>
+                    <span class="text-gray-600">Description:</span> 
+                    {{ type.description }}
+                  </div>
+                  <div>
+                    <span class="text-gray-600">Penalty Fee:</span>
+                    ZWG {{ formatCurrency(type.penalty_fee) }}
+                  </div>
+                </div>
+              </n-card>
+            </div>
+          </n-tab-pane>
+        </n-tabs>
       </div>
 
-      <!-- Violations Table -->
-      <n-card>
-        <n-data-table
-          :columns="adminColumns"
-          :data="allViolations"
-          :pagination="pagination"
-          :bordered="false"
-          :single-line="false"
-        />
-      </n-card>
+      <!-- Desktop View -->
+      <div class="hidden md:block">
+        <!-- Violations Table -->
+        <div class="mb-8">
+          <h1 class="mb-6 text-2xl font-medium">All Violations</h1>
+          <n-card>
+            <n-data-table
+              :columns="adminColumns"
+              :data="allViolations"
+              :pagination="pagination"
+              :bordered="false"
+              :single-line="false"
+              :row-props="getRowProps"
+              :row-key="(row) => row.id"
+            />
+          </n-card>
+        </div>
 
-     
+        <!-- Disputes Table -->
+        <div class="mb-8">
+          <h2 class="mb-6 text-2xl font-medium">Violation Disputes</h2>
+          <n-card>
+            <n-data-table
+              :columns="disputeColumns"
+              :data="allDisputes"
+              :pagination="pagination"
+              :bordered="false"
+              :single-line="false"
+              :row-key="(row) => row.id"
+            />
+          </n-card>
+        </div>
 
-      <!-- Disputes Table -->
-      <div class="flex justify-between items-center mt-8 mb-6">
-        <h2 class="text-2xl font-medium">Violation Disputes</h2>
+        <!-- Violation Types Table -->
+        <div>
+          <h2 class="mb-6 text-2xl font-medium">Violation Types</h2>
+          <n-card>
+            <n-data-table
+              :columns="violationTypeColumns"
+              :data="violationTypes"
+              :pagination="pagination"
+              :bordered="false"
+              :single-line="false"
+              :row-key="(row) => row.id"
+            />
+          </n-card>
+        </div>
       </div>
-
-      <n-card>
-        <n-data-table
-          :columns="disputeColumns"
-          :data="allDisputes"
-          :pagination="pagination"
-          :bordered="false"
-          :single-line="false"
-        />
-      </n-card>
-      
-       <!-- Violation Types Table -->
-      <div class="flex justify-between items-center mt-8 mb-6">
-        <h2 class="text-2xl font-medium">Violation Types</h2>
-      </div>
-
-      <n-card>
-        <n-data-table
-          :columns="violationTypeColumns"
-          :data="violationTypes"
-          :pagination="pagination"
-          :bordered="false"
-          :single-line="false"
-        />
-      </n-card>
-      
     </template>
 
     <!-- User Dashboard -->
     <template v-else>
-        <div class="flex justify-between items-center mb-6">
-          <h1 class="text-2xl font-medium">Violations</h1>
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-medium">Violations</h1>
+      </div>
+
+      <!-- Mobile View -->
+      <div class="md:hidden">
+        <div class="flex justify-between items-center mb-4">
+          <div class="text-lg font-medium">Your Violations</div>
+        </div>
+        
+        <!-- Mobile List View -->
+        <div class="space-y-4">
+          <n-card 
+            v-for="violation in violations" 
+            :key="violation.id" 
+            class="cursor-pointer" 
+            :class="[
+              'mobile-violation-card',
+              { 
+                'disputed-card': violation.status === 'disputed',
+                'paid-card': violation.status === 'paid',
+                'pending-card': violation.status === 'pending'
+              }
+            ]"
+            @click="toggleViolationDetails(violation.id)"
+          >
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="font-medium">{{ violation.vehicle.vrn }}</div>
+                <div class="text-sm text-gray-600">
+                  {{ new Date(violation.violation_date).toLocaleDateString() }}
+                </div>
+              </div>
+              <div class="flex gap-2 items-center">
+                <n-tag :type="getStatusType(violation.status)">
+                  {{ violation.status }}
+                </n-tag>
+                <n-checkbox v-if="violation.status !== 'paid' && violation.status !== 'disputed'"
+                          :checked="checkedRowKeys.includes(violation.id.toString())"
+                          @update:checked="handleMobileSelection(violation.id)" />
+              </div>
+            </div>
+
+            <!-- Expandable Details -->
+            <div v-if="expandedViolation === violation.id" 
+                 class="pt-4 mt-4 border-t border-gray-200">
+              <div class="space-y-2">
+                <div>
+                  <span class="text-gray-600">Violation:</span> 
+                  {{ violation.violation_type.name }}
+                </div>
+                <div>
+                  <span class="text-gray-600">Vehicle:</span>
+                  {{ violation.vehicle.make }} {{ violation.vehicle.model }}
+                </div>
+                <div>
+                  <span class="text-gray-600">Penalty Fee:</span>
+                  ZWG {{ formatCurrency(violation.violation_type.penalty_fee) }}
+                </div>
+                <div class="flex gap-2">
+                  <n-button 
+                    v-if="violation.status !== 'paid' && violation.status !== 'disputed'"
+                    size="small" 
+                    type="primary" 
+                    @click="handleSinglePayment(violation)"
+                    :style="{
+                      backgroundColor: '#F4B183',
+                      color: '#000000'
+                    }">
+                    Pay Now
+                  </n-button>
+                </div>
+              </div>
+            </div>
+          </n-card>
         </div>
 
-        <n-card>
-          <div class="flex justify-between items-center mb-4">
-            <div class="text-lg font-medium">Your Violations</div>
-            <div class="flex gap-6 items-center">
-              <div class="flex gap-2 items-center">
-                <span class="text-gray-600">Show</span>
-                <n-select v-model:value="pageSize" :options="pageSizeOptions" size="small"
-                  style="width: 100px" />
-                <span class="text-gray-600">entries</span>
-              </div>
-              <div class="flex gap-2 items-center">
-                <span class="text-gray-600">Sort by:</span>
-                <n-button-group>
-                  <n-button @click="sortByDate" size="small" :style="{
-                    color: '#666666',
-                    backgroundColor: sortField === 'date' ? '#F4B18330' : 'transparent'
-                  }">
-                    Date
-                    <n-icon size="16" class="ml-1">
-                      <arrow-down v-if="sortField === 'date' && sortOrder === 'desc'" />
-                      <arrow-up v-if="sortField === 'date' && sortOrder === 'asc'" />
-                    </n-icon>
-                  </n-button>
-                  <n-button @click="sortByFee" size="small" :style="{
-                    color: '#666666',
-                    backgroundColor: sortField === 'fee' ? '#F4B18330' : 'transparent'
-                  }">
-                    Fee
-                    <n-icon size="16" class="ml-1">
-                      <arrow-down v-if="sortField === 'fee' && sortOrder === 'desc'" />
-                      <arrow-up v-if="sortField === 'fee' && sortOrder === 'asc'" />
-                    </n-icon>
-                  </n-button>
-                </n-button-group>
-              </div>
+        <!-- Mobile Total and Pay Button -->
+        <div v-if="checkedRowKeys.length > 0" 
+             class="fixed right-0 bottom-0 left-0 p-4 bg-white border-t shadow-lg">
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="text-sm text-gray-600">Selected: {{ checkedRowKeys.length }}</div>
+              <div class="font-medium">Total: ZWG {{ totalPayment.toFixed(2) }}</div>
             </div>
+            <n-button type="primary" @click="handlePayment"
+                      :style="{
+                        backgroundColor: '#F4B183',
+                        borderRadius: '50px',
+                      }">
+              Pay Selected
+            </n-button>
           </div>
+        </div>
+      </div>
 
-          <n-data-table 
-            :loading="loading"
-            :columns="columns" 
-            :data="violations" 
-            :pagination=pagination 
-            :bordered="false"
-            :single-line="false"
-            :row-key="(row) => row.id.toString()" 
-            @update:checked-row-keys="handleSelectionChange"
-          />
-
-          <div class="flex justify-between items-center pt-4 mt-6 border-t">
-            <div class="text-lg">
-              Total Payment: <span class="font-medium">ZWG {{ totalPayment.toFixed(2) }}</span>
+      <!-- Desktop View -->
+      <div class="hidden md:block">
+        <n-card>
+          <!-- Payment button section -->
+          <div class="flex justify-between items-center mb-4">
+            <div class="text-sm text-gray-600">
+              <template v-if="checkedRowKeys.length > 0">
+                Selected: {{ checkedRowKeys.length }} | 
+                Total: ZWG {{ totalPayment.toFixed(2) }}
+              </template>
             </div>
-            <n-button type="primary" size="large" :disabled="checkedRowKeys.length === 0" 
+            <n-button
+              v-if="checkedRowKeys.length > 0"
+              type="primary"
+              @click="handlePayment"
               :style="{
                 backgroundColor: '#F4B183',
                 borderRadius: '50px',
                 color: '#000000'
-              }" 
-              :hover-style="{
-                backgroundColor: '#f3a46d',
-                color: '#000000'
-              }" 
-              @click="handlePayment" 
-              class="px-8 login-button">
-              <span class="w-full text-center">Pay Penalties</span>
+              }"
+            >
+              Pay Selected ({{ checkedRowKeys.length }})
             </n-button>
           </div>
+
+          <!-- Updated table with row-key -->
+          <n-data-table 
+            :loading="loading"
+            :columns="columns" 
+            :data="violations" 
+            :pagination="pagination"
+            :row-props="getRowProps"
+            :row-key="(row) => row.id"
+            @update:checked-row-keys="handleSelectionChange"
+          />
         </n-card>
+      </div>
     </template>
 
     <n-modal v-model:show="showDisputeModal" preset="card" title="Respond to Dispute" style="width: 600px">
@@ -188,7 +364,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch, h } from 'vue'
-import { NCard, NDataTable, NButton, NButtonGroup, NIcon, NSelect, NTag, NSpace, NModal, NInput, NRadioGroup, NRadio } from 'naive-ui'
+import { NCard, NDataTable, NButton, NButtonGroup, NIcon, NSelect, NTag, NSpace, NModal, NInput, NRadioGroup, NRadio, NTabs, NTabPane } from 'naive-ui'
 import { ArrowUp, ArrowDown } from '@vicons/ionicons5'
 import { useRouter, useRoute } from 'vue-router'
 import type { RowKey } from '../types'
@@ -427,7 +603,7 @@ if (isAdmin.value) {
 const columns: DataTableColumns<Violation> = [
     {
         type: 'selection',
-        disabled: (row: Violation) => row.status === 'PAID',
+        disabled: (row: Violation) => row.status === 'paid' || row.status === 'disputed',
         multiple: true,
         width: 50
     },
@@ -470,7 +646,7 @@ const columns: DataTableColumns<Violation> = [
     }
 ]
 
-const checkedRowKeys = ref<string[]>([])
+const checkedRowKeys = ref<(string | number)[]>([])
 
 const totalPayment = computed(() => {
     return violations.value
@@ -501,20 +677,27 @@ const sortViolations = () => {
 }
 
 const handlePayment = () => {
+    const selectedViolations = violations.value.filter(v => 
+        checkedRowKeys.value.includes(v.id.toString())
+    )
+    
+    if (selectedViolations.some(v => v.status === 'paid' || v.status === 'disputed')) {
+        notification.showError('Error', 'Cannot process payment for violations that are paid or under dispute')
+        return
+    }
+
     router.push({
         path: '/payment',
         query: {
             amount: totalPayment.value,
-            count: checkedRowKeys.value.length
+            count: checkedRowKeys.value.length,
+            violations: checkedRowKeys.value.join(',')
         }
     })
 }
 
-const handleSelectionChange = (keys: RowKey[]) => {
-    checkedRowKeys.value = keys as string[]
-    violations.value.forEach(v => {
-        v.selected = keys.includes(v.reference)
-    })
+const handleSelectionChange = (keys: (string | number)[]) => {
+    checkedRowKeys.value = keys
 }
 
 const fetchViolations = async () => {
@@ -539,7 +722,6 @@ const fetchViolations = async () => {
 watch(
     () => route.query.refresh,
     () => {
-        console.log('Route refresh detected, fetching violations...')
         fetchViolations()
     }
 )
@@ -555,10 +737,6 @@ onMounted(async () => {
     await fetchViolations()
   }
   loading.value = false
-})
-
-onUnmounted(() => {
-    console.log('Dashboard unmounted')
 })
 
 const showDisputeModal = ref(false)
@@ -649,6 +827,76 @@ const handleDeleteViolationType = async (id: number) => {
   } catch (error: any) {
     notification.showError(error.response?.data?.message || 'Failed to delete violation type')
   }
+}
+
+// Add these new refs and functions
+const expandedViolation = ref<number | null>(null)
+
+const toggleViolationDetails = (id: number) => {
+  expandedViolation.value = expandedViolation.value === id ? null : id
+}
+
+const handleMobileSelection = (id: number) => {
+  const idString = id.toString()
+  const currentIndex = checkedRowKeys.value.indexOf(idString)
+  
+  if (currentIndex === -1) {
+    checkedRowKeys.value.push(idString)
+  } else {
+    checkedRowKeys.value.splice(currentIndex, 1)
+  }
+}
+
+const getStatusType = (status: string) => {
+  switch (status) {
+    case 'PAID':
+      return 'success'
+    case 'PENDING':
+      return 'warning'
+    default:
+      return 'default'
+  }
+}
+
+const handleSinglePayment = (violation: Violation) => {
+  if (violation.status === 'paid') {
+    notification.showError('Error', 'This violation has already been paid')
+    return
+  }
+  if (violation.status === 'disputed') {
+    notification.showError('Error', 'This violation is currently under dispute')
+    return
+  }
+  router.push({
+    path: '/payment',
+    query: {
+      amount: violation.violation_type.penalty_fee,
+      count: 1,
+      violations: violation.id.toString()
+    }
+  })
+}
+
+const hasUnpaidSelectedViolations = computed(() => {
+    return checkedRowKeys.value.length > 0 && 
+           violations.value
+               .filter(v => checkedRowKeys.value.includes(v.id.toString()))
+               .some(v => v.status !== 'paid' && v.status !== 'disputed')
+})
+
+const getRowProps = (row: any) => {
+  return {
+    class: row.status,
+    style: {
+      cursor: 'pointer'
+    }
+  }
+}
+
+// Add a helper function if you need to handle null/undefined values
+const formatCurrency = (amount: string | number) => {
+  const value = parseFloat(amount as string)
+  return isNaN(value) ? '0.00' : value.toFixed(2)
 }
 </script>
 
@@ -768,5 +1016,94 @@ const handleDeleteViolationType = async (id: number) => {
 
 :deep(.n-data-table th.n-data-table-th) {
   width: auto !important;
+}
+
+.mobile-violation-card {
+  transition: all 0.3s ease;
+}
+
+.mobile-violation-card:active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Bottom payment bar for mobile */
+@media (max-width: 768px) {
+  .space-y-6 {
+    padding-bottom: 80px; /* Add space for fixed payment bar */
+  }
+}
+
+:deep(.n-button:not([type="primary"])) {
+  /* For non-primary buttons like Dispute */
+  color: var(--text-color) !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+:deep(.n-button[type="primary"]) {
+  /* For primary buttons like Pay Now */
+  color: #000000 !important;
+  background-color: #F4B183 !important;
+}
+
+/* Hover states */
+:deep(.n-button:not([type="primary"]):hover) {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+:deep(.n-button[type="primary"]:hover) {
+  background-color: #f3a46d !important;
+}
+
+.disputed-card {
+  background-color: rgba(244, 177, 131, 0.1) !important; /* Light orange background */
+  border: 1px solid #F4B183 !important; /* Orange border */
+}
+
+.paid-card {
+  background-color: rgba(34, 197, 94, 0.1) !important; /* Light green background */
+  border: 1px solid #22c55e !important; /* Green border */
+}
+
+.pending-card {
+  background-color: rgba(239, 68, 68, 0.1) !important; /* Light red background */
+  border: 1px solid #ef4444 !important; /* Red border */
+}
+
+/* Update table row styles to target specific combinations */
+:deep(.n-data-table-tr.paid) {
+  background-color: rgba(34, 197, 94, 0.1) !important;
+}
+
+:deep(.n-data-table-tr.disputed) {
+  background-color: rgba(244, 177, 131, 0.1) !important;
+}
+
+:deep(.n-data-table-tr.pending) {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Hover states */
+:deep(.n-data-table-tr.paid:hover) {
+  background-color: rgba(34, 197, 94, 0.15) !important;
+}
+
+:deep(.n-data-table-tr.disputed:hover) {
+  background-color: rgba(244, 177, 131, 0.15) !important;
+}
+
+:deep(.n-data-table-tr.pending:hover) {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Add these styles for the tabs */
+:deep(.n-tabs-nav) {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+:deep(.n-tabs-nav::before) {
+  border-bottom: 1px solid #e5e7eb !important;
 }
 </style>

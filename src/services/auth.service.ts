@@ -43,11 +43,19 @@ const refreshToken = async () => {
 
 export const authService = {
     async login(credentials: LoginCredentials): Promise<AuthResponse> {
-        const response = await api.post<AuthResponse>('/auth/login', credentials)
-        if (response.data.refreshToken) {
-            localStorage.setItem('refreshToken', response.data.refreshToken)
+        try {
+            const response = await api.post<AuthResponse>('/auth/login', credentials, {
+                headers: {
+                    'X-Login-Request': 'true'
+                }
+            })
+            if (response.data.refreshToken) {
+                localStorage.setItem('refreshToken', response.data.refreshToken)
+            }
+            return response.data
+        } catch (error) {
+            throw error
         }
-        return response.data
     },
 
     updateProfile: async (data: UpdateProfileData) => {

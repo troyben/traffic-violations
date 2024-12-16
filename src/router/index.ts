@@ -75,8 +75,16 @@ const routes: RouteRecordRaw[] = [
     },
     {
         path: '/payment',
+        name: 'payment',
         component: () => import('../views/Payment.vue'),
-        meta: { requiresAuth: true }
+        meta: { 
+            requiresAuth: true 
+        },
+        props: (route) => ({ 
+            amount: Number(route.query.amount) || 0,
+            count: Number(route.query.count) || 0,
+            violations: route.query.violations
+        })
     }
 ]
 

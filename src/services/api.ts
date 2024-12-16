@@ -34,6 +34,11 @@ api.interceptors.response.use(
     async error => {
         const originalRequest = error.config
 
+        // Don't attempt token refresh for login requests
+        if (originalRequest.headers['X-Login-Request']) {
+            return Promise.reject(error)
+        }
+
         if (originalRequest._retry) {
             // If we already tried refreshing, logout and redirect
             const authStore = useAuthStore()
