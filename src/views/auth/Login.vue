@@ -20,13 +20,25 @@
                         placeholder="Enter your password" :style="{ '--n-padding-vertical': '12px' }" />
                 </div>
 
-                <n-button type="primary" block size="large" :style="{
-                    backgroundColor: '#F4B183',
-                    borderRadius: '50px',
-                }" :hover-style="{
-                    backgroundColor: '#f3a46d',
-                }" :focusable="false" class="login-button" @click="handleSubmit">
-                    <span class="w-full text-center">Login</span>
+                <n-button 
+                    type="primary" 
+                    block 
+                    size="large" 
+                    :loading="loading"
+                    :style="{
+                        backgroundColor: '#F4B183',
+                        borderRadius: '50px',
+                    }" 
+                    :hover-style="{
+                        backgroundColor: '#f3a46d',
+                    }" 
+                    :focusable="false" 
+                    class="login-button" 
+                    @click="handleSubmit"
+                >
+                    <span class="w-full text-center">
+                        {{ loading ? 'Logging in...' : 'Login' }}
+                    </span>
                 </n-button>
             </n-form>
 
@@ -142,5 +154,16 @@ const handleSubmit = async () => {
 .n-input:focus-within {
     border-color: #F4B183 !important;
     box-shadow: 0 0 0 2px rgba(244, 177, 131, 0.2) !important;
+}
+
+.login-button {
+    --disabled-bg: #f4b18380;
+    --disabled-text: #000000;
+}
+
+.login-button:disabled {
+    background-color: var(--disabled-bg) !important;
+    color: var(--disabled-text) !important;
+    cursor: not-allowed;
 }
 </style>
