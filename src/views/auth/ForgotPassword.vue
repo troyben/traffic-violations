@@ -1,8 +1,8 @@
 <template>
-    <h1 class="absolute top-0 left-0 mt-10 ml-10 text-5xl font-bold text-center font-small">R238121C</h1>
     <div class="w-[500px] px-4">
         <n-card class="w-full" :content-style="{ padding: '40px 35px' }">
-            <h1 class="mb-10 text-2xl text-center font-small">Forgot Password</h1>
+            <h1 class="text-3xl font-bold text-center font-small">R238121C</h1>
+            <h1 class="mb-10 text-center text-1xl font-small">Forgot Password</h1>
 
             <n-form :model="formData" @submit.prevent="handleSubmit">
                 <div class="relative mb-4">
@@ -32,6 +32,8 @@
             </div>
         </n-card>
     </div>
+        <p class="absolute bottom-20 mt-10 ml-10 text-center text-1xl left-50 font-small">Smart Traffic Violation Detection and Penalty System</p>
+
 </template>
 
 <script lang="ts" setup>
