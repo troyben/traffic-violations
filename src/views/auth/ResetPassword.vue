@@ -1,11 +1,12 @@
 <template>
     <div class="w-[500px] px-4">
         <n-card class="w-full" :content-style="{ padding: '40px 35px' }">
-            <h1 class="text-2xl font-medium text-center mb-10">Reset Password</h1>
+            <h1 class="mb-2 text-3xl font-bold text-center font-small">R238121C</h1>
+            <h1 class="mb-10 text-center text-1xl font-small">Reset Password</h1>
 
             <n-form :model="formData" @submit.prevent="handleSubmit">
                 <div class="relative mb-4">
-                    <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10">
+                    <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white">
                         New Password
                     </label>
                     <n-input v-model:value="formData.password" type="password" size="large"
@@ -13,7 +14,7 @@
                 </div>
 
                 <div class="relative mb-4">
-                    <label class="absolute -top-2 left-3 bg-white px-1 text-sm text-gray-600 z-10">
+                    <label class="absolute -top-2 left-3 z-10 px-1 text-sm text-gray-600 bg-white">
                         Confirm Password
                     </label>
                     <n-input v-model:value="formData.confirmPassword" type="password" size="large"
@@ -31,7 +32,7 @@
             </n-form>
 
             <div class="mt-6 text-center">
-                <p class="text-gray-400 text-sm">
+                <p class="text-sm text-gray-400">
                     Remember your password?
                     <router-link to="/auth/login" class="text-[#F4B183] hover:underline">
                         Login Now

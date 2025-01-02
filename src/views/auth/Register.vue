@@ -1,7 +1,8 @@
 <template>
     <div class="w-[500px] px-4">
         <n-card class="w-full" :content-style="{ padding: '40px 35px' }">
-            <h1 class="mb-10 text-2xl font-medium text-center">Register</h1>
+             <h1 class="mb-2 text-3xl font-bold text-center font-small">R238121C</h1>
+            <h1 class="mb-10 text-center text-1xl font-small">Register</h1>
 
             <n-form :model="formData" @submit.prevent="handleSubmit">
                 <div class="relative mb-4">
