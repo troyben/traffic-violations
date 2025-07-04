@@ -365,9 +365,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch, h } from 'vue'
 import { NCard, NDataTable, NButton, NButtonGroup, NIcon, NSelect, NTag, NSpace, NModal, NInput, NRadioGroup, NRadio, NTabs, NTabPane } from 'naive-ui'
-import { ArrowUp, ArrowDown } from '@vicons/ionicons5'
 import { useRouter, useRoute } from 'vue-router'
-import type { RowKey } from '../types'
 import type { DataTableColumns } from 'naive-ui'
 import { violationService, type Violation } from '../services/violation.service'
 import { useNotification } from '../composables/useNotification'
@@ -651,7 +649,10 @@ const checkedRowKeys = ref<(string | number)[]>([])
 const totalPayment = computed(() => {
     return violations.value
         .filter(v => checkedRowKeys.value.includes(v.id.toString()))
-        .reduce((sum, v) => sum + v.violation_type.penalty_fee, 0)
+        .reduce((sum, v) => {
+            const fee = parseFloat(v.violation_type.penalty_fee)
+            return sum + (isNaN(fee) ? 0 : fee)
+        }, 0)
 })
 
 const sortByDate = () => {
@@ -685,11 +686,11 @@ const handlePayment = () => {
         notification.showError('Error', 'Cannot process payment for violations that are paid or under dispute')
         return
     }
-
+    
     router.push({
         path: '/payment',
         query: {
-            amount: totalPayment.value,
+            amount: totalPayment.value.toString(),
             count: checkedRowKeys.value.length,
             violations: checkedRowKeys.value.join(',')
         }
@@ -867,10 +868,14 @@ const handleSinglePayment = (violation: Violation) => {
     notification.showError('Error', 'This violation is currently under dispute')
     return
   }
+    
+  // Parse the penalty fee as a number
+  const amount = parseFloat(violation.violation_type.penalty_fee)
+  
   router.push({
     path: '/payment',
     query: {
-      amount: violation.violation_type.penalty_fee,
+      amount: amount.toString(), // Convert back to string for URL
       count: 1,
       violations: violation.id.toString()
     }
