@@ -1,5 +1,5 @@
 name = "traffic-violations"
 compatibility_date = "2025-07-04"
 
-[site]
-bucket = "./dist" 
+[assets]
+directory = "./dist" 
